@@ -1,3 +1,20 @@
+server:
+  forward-headers-strategy: framework
+
 spring:
   application:
     name: forward-strategy-framework
+  cloud:
+    gateway:
+      server:
+        webflux:
+          trusted-proxies: ".*"
+          forwarded:
+            enabled: true
+          x-forwarded:
+            enabled: false
+          routes:
+            - id: downstream
+              uri: ${downstream.uri:http://localhost:8081}
+              predicates:
+                - Path=/**
